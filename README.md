@@ -1,86 +1,24 @@
------------------Sales Analysis ---------------------
+# Data Analysis Using Power BI
 
--- 1. How many total number of transaction we have?
+1. We have two blank zone in market table, so we have to remove that blank for better analysis
 
-SELECT 
-    COUNT(*) total_transactions
-FROM
-    sales.transactions;
+= Table.SelectRows(sales_markets, each ([zone] <> ""))
 
--- 2. Total tranction in city Chennai
+2. There is -1 and 0 in sales_amount in transactions table, We cannot keep these data for our visualization
 
-SELECT 
-    COUNT(*) total_transactions
-FROM
-    sales.transactions
-WHERE
-    market_code = 'Mark001';
+= Table.SelectRows(sales_transactions, each ([sales_amount] <> -1 and [sales_amount] <> 0))
 
--- 3. fetch All transaction of Year-2022
+3. Removing deuplicate data 
 
-SELECT 
-    t.*, O.Year
-FROM
-    sales.transactions t
-        INNER JOIN
-    sales.date O ON t.Order_date = O.date
-WHERE
-    O.Year = 2020;
+= Table.SelectRows(#"Filtered Rows", each ([currency] = "INR#(cr)" or [currency] = "USD"))
 
--- 4. check the distinct year that is present in our data
+4. We had USD and INR in our currency column , so we need to convert USD into INR currency 
 
-SELECT DISTINCT
-    (year)
-FROM
-    sales.date;
+= Table.AddColumn(#"Filtered Rows1", "normalised_currency", each if [currency] = "USD" then [sales_amount]*82 else [sales_amount])
 
--- 5. Total revenue made in year 2020
 
-SELECT 
-    SUM(t.sales_amount) Total_Revenue
-FROM
-    sales.transactions t
-        INNER JOIN
-    sales.date O ON t.Order_date = O.date
-WHERE
-    O.Year = 2020;
+# Dashboard
 
--- 6.Total revenue per year
+![dashboard_pdf_page-0001](https://user-images.githubusercontent.com/92949677/208621294-d50d2f8e-0661-451a-a800-bea3311d9da8.jpg)
 
-SELECT 
-    year, SUM(t.sales_amount) Total_Revenue
-FROM
-    sales.transactions t
-        INNER JOIN
-    sales.date O ON t.Order_date = O.date
-GROUP BY year;
-
--- 7.Total revenue in chennai city in 2020
-
-SELECT 
-    SUM(t.sales_amount) Total_Revenue
-FROM
-    sales.transactions t
-        INNER JOIN
-    sales.date O ON t.Order_date = O.date
-WHERE
-    year = 2020 AND market_code = 'Mark001';
-
--- 8. distinct product sold in chennai
-
-SELECT DISTINCT
-    (P.product_code)
-FROM
-    sales.transactions T
-        INNER JOIN
-    sales.products P ON T.product_code = P.product_code;
-
--- 9. check where the sum amount is less than 0
-
-SELECT 
-    *
-FROM
-    sales.transactions
-WHERE
-    sales_amount <= 0;
 
