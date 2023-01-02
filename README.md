@@ -3,7 +3,7 @@
 ## - Introduction  ![image](https://user-images.githubusercontent.com/92949677/208624104-3fd15997-d6bf-464d-b1c6-4b53e8e7dfe9.png)
 
 
-Data analytics is the process of analyzing raw data in order to draw out meaningful, actionable insights, which are then used to inform and drive smart business decisions. In this project , we will a data analyst perform a project.
+Data analytics is the process of analyzing raw data in order to draw out meaningful, actionable insights, which are then used to inform and drive smart business decisions. In this project , we will perform a data analyst project.
 
 ## - Problem statement 
 
